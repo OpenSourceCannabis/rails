@@ -208,7 +208,6 @@ module ActiveRecord
 
         distinct = nil if column_name =~ /\s*DISTINCT\s+/i
       end
-
       if @group_values.any?
         execute_grouped_calculation(operation, column_name, distinct)
       else
@@ -266,7 +265,7 @@ module ActiveRecord
         [aliaz, column_for(field)]
       }
 
-      group = @klass.connection.adapter_name == 'FrontBase' ? group_aliases : group_fields
+      group = group_fields
 
       if operation == 'count' && column_name == :all
         aggregate_alias = 'count_all'
@@ -278,7 +277,8 @@ module ActiveRecord
         operation_over_aggregate_column(
           aggregate_column(column_name),
           operation,
-          distinct).as(aggregate_alias)
+          distinct
+        ).as(aggregate_alias)
       ]
       select_values += @select_values unless @having_values.empty?
 
@@ -291,8 +291,21 @@ module ActiveRecord
       }
 
       relation = except(:group).group(group)
-      relation.select_values = select_values
 
+      # return something_new_and_shiny
+      # if we find EXTRACT in group_values
+      # we know our query is going to be invalid
+      # so we use that SQL statement as a subquery
+      # of a count all statement
+      return type_cast_calculated_value(
+        @klass.connection.select_value(
+          "SELECT COUNT(*) AS count_all FROM (#{relation.to_sql}) AS something_new_and_shiny"
+        ),
+        :count_all,
+        operation
+      ) if relation.group_values.to_s[2..2**3] == 'EXTRACT'
+
+      relation.select_values = select_values
       calculated_data = @klass.connection.select_all(relation)
 
       if association
@@ -350,6 +363,7 @@ module ActiveRecord
     end
 
     def select_for_count
+      # binding.pry
       if @select_values.present?
         select = @select_values.join(", ")
         select if select !~ /(,|\*)/

@@ -1,7 +1,7 @@
 #!/usr/bin/env rake
 
-require 'rdoc/task'
-require 'sdoc'
+# require 'rdoc/task'
+# require 'sdoc'
 require 'net/http'
 
 $:.unshift File.expand_path('..', __FILE__)
@@ -48,9 +48,9 @@ task :install => :gem do
   system("gem install pkg/rails-#{version}.gem --no-ri --no-rdoc")
 end
 
-desc "Generate documentation for the Rails framework"
-RDoc::Task.new do |rdoc|
-  RDOC_MAIN = 'RDOC_MAIN.rdoc'
+# desc "Generate documentation for the Rails framework"
+# RDoc::Task.new do |rdoc|
+#   RDOC_MAIN = 'RDOC_MAIN.rdoc'
 
   # This is a hack.
   #
@@ -68,81 +68,81 @@ RDoc::Task.new do |rdoc|
   # The idea for the future is to have totally different files, since the
   # API is no longer a generic entry point to Rails and deserves a
   # dedicated main page specifically thought as an API entry point.
-  rdoc.before_running_rdoc do
-    rdoc_main = File.read('README.rdoc')
+#   rdoc.before_running_rdoc do
+#     rdoc_main = File.read('README.rdoc')
 
-    # The ^(?=\S) assertion prevents code blocks from being processed,
-    # since no autolinking happens there and RDoc displays the backslash
-    # otherwise.
-    rdoc_main.gsub!(/^(?=\S).*?\b(?=Rails)\b/) { "#$&\\" }
-    rdoc_main.gsub!(%r{link:/rails/rails/blob/master/(\w+)/README\.rdoc}, "link:files/\\1/README_rdoc.html")
+#     # The ^(?=\S) assertion prevents code blocks from being processed,
+#     # since no autolinking happens there and RDoc displays the backslash
+#     # otherwise.
+#     rdoc_main.gsub!(/^(?=\S).*?\b(?=Rails)\b/) { "#$&\\" }
+#     rdoc_main.gsub!(%r{link:/rails/rails/blob/master/(\w+)/README\.rdoc}, "link:files/\\1/README_rdoc.html")
 
-    # Remove Travis and Gemnasium status images from API pages. Only GitHub
-    # README page gets these images. Travis' https build image is used to avoid
-    # GitHub caching: http://about.travis-ci.org/docs/user/status-images
-    rdoc_main.gsub!(%r{^== (Build|Dependency) Status.*}, '')
+#     # Remove Travis and Gemnasium status images from API pages. Only GitHub
+#     # README page gets these images. Travis' https build image is used to avoid
+#     # GitHub caching: http://about.travis-ci.org/docs/user/status-images
+#     rdoc_main.gsub!(%r{^== (Build|Dependency) Status.*}, '')
 
-    File.open(RDOC_MAIN, 'w') do |f|
-      f.write(rdoc_main)
-    end
+#     File.open(RDOC_MAIN, 'w') do |f|
+#       f.write(rdoc_main)
+#     end
 
-    rdoc.rdoc_files.include(RDOC_MAIN)
-  end
+#     rdoc.rdoc_files.include(RDOC_MAIN)
+#   end
 
-  rdoc.rdoc_dir = 'doc/rdoc'
-  rdoc.title    = "Ruby on Rails Documentation"
+#   rdoc.rdoc_dir = 'doc/rdoc'
+#   rdoc.title    = "Ruby on Rails Documentation"
 
-  rdoc.options << '-f' << 'sdoc'
-  rdoc.options << '-T' << 'rails'
-  rdoc.options << '-e' << 'UTF-8'
-  rdoc.options << '-g' # SDoc flag, link methods to GitHub
-  rdoc.options << '-m' << RDOC_MAIN
+#   rdoc.options << '-f' << 'sdoc'
+#   rdoc.options << '-T' << 'rails'
+#   rdoc.options << '-e' << 'UTF-8'
+#   rdoc.options << '-g' # SDoc flag, link methods to GitHub
+#   rdoc.options << '-m' << RDOC_MAIN
 
-  rdoc.rdoc_files.include('railties/CHANGELOG.md')
-  rdoc.rdoc_files.include('railties/MIT-LICENSE')
-  rdoc.rdoc_files.include('railties/README.rdoc')
-  rdoc.rdoc_files.include('railties/lib/**/*.rb')
-  rdoc.rdoc_files.exclude('railties/lib/rails/generators/**/templates/**/*.rb')
+#   rdoc.rdoc_files.include('railties/CHANGELOG.md')
+#   rdoc.rdoc_files.include('railties/MIT-LICENSE')
+#   rdoc.rdoc_files.include('railties/README.rdoc')
+#   rdoc.rdoc_files.include('railties/lib/**/*.rb')
+#   rdoc.rdoc_files.exclude('railties/lib/rails/generators/**/templates/**/*.rb')
 
-  rdoc.rdoc_files.include('activerecord/README.rdoc')
-  rdoc.rdoc_files.include('activerecord/CHANGELOG.md')
-  rdoc.rdoc_files.include('activerecord/lib/active_record/**/*.rb')
-  rdoc.rdoc_files.exclude('activerecord/lib/active_record/vendor/*')
+#   rdoc.rdoc_files.include('activerecord/README.rdoc')
+#   rdoc.rdoc_files.include('activerecord/CHANGELOG.md')
+#   rdoc.rdoc_files.include('activerecord/lib/active_record/**/*.rb')
+#   rdoc.rdoc_files.exclude('activerecord/lib/active_record/vendor/*')
 
-  rdoc.rdoc_files.include('activeresource/README.rdoc')
-  rdoc.rdoc_files.include('activeresource/CHANGELOG.md')
-  rdoc.rdoc_files.include('activeresource/lib/active_resource.rb')
-  rdoc.rdoc_files.include('activeresource/lib/active_resource/*')
+#   rdoc.rdoc_files.include('activeresource/README.rdoc')
+#   rdoc.rdoc_files.include('activeresource/CHANGELOG.md')
+#   rdoc.rdoc_files.include('activeresource/lib/active_resource.rb')
+#   rdoc.rdoc_files.include('activeresource/lib/active_resource/*')
 
-  rdoc.rdoc_files.include('actionpack/README.rdoc')
-  rdoc.rdoc_files.include('actionpack/CHANGELOG.md')
-  rdoc.rdoc_files.include('actionpack/lib/abstract_controller/**/*.rb')
-  rdoc.rdoc_files.include('actionpack/lib/action_controller/**/*.rb')
-  rdoc.rdoc_files.include('actionpack/lib/action_dispatch/**/*.rb')
-  rdoc.rdoc_files.include('actionpack/lib/action_view/**/*.rb')
-  rdoc.rdoc_files.exclude('actionpack/lib/action_controller/vendor/*')
+#   rdoc.rdoc_files.include('actionpack/README.rdoc')
+#   rdoc.rdoc_files.include('actionpack/CHANGELOG.md')
+#   rdoc.rdoc_files.include('actionpack/lib/abstract_controller/**/*.rb')
+#   rdoc.rdoc_files.include('actionpack/lib/action_controller/**/*.rb')
+#   rdoc.rdoc_files.include('actionpack/lib/action_dispatch/**/*.rb')
+#   rdoc.rdoc_files.include('actionpack/lib/action_view/**/*.rb')
+#   rdoc.rdoc_files.exclude('actionpack/lib/action_controller/vendor/*')
 
-  rdoc.rdoc_files.include('actionmailer/README.rdoc')
-  rdoc.rdoc_files.include('actionmailer/CHANGELOG.md')
-  rdoc.rdoc_files.include('actionmailer/lib/action_mailer/base.rb')
-  rdoc.rdoc_files.include('actionmailer/lib/action_mailer/mail_helper.rb')
-  rdoc.rdoc_files.exclude('actionmailer/lib/action_mailer/vendor/*')
+#   rdoc.rdoc_files.include('actionmailer/README.rdoc')
+#   rdoc.rdoc_files.include('actionmailer/CHANGELOG.md')
+#   rdoc.rdoc_files.include('actionmailer/lib/action_mailer/base.rb')
+#   rdoc.rdoc_files.include('actionmailer/lib/action_mailer/mail_helper.rb')
+#   rdoc.rdoc_files.exclude('actionmailer/lib/action_mailer/vendor/*')
 
-  rdoc.rdoc_files.include('activesupport/README.rdoc')
-  rdoc.rdoc_files.include('activesupport/CHANGELOG.md')
-  rdoc.rdoc_files.include('activesupport/lib/active_support/**/*.rb')
-  rdoc.rdoc_files.exclude('activesupport/lib/active_support/vendor/*')
+#   rdoc.rdoc_files.include('activesupport/README.rdoc')
+#   rdoc.rdoc_files.include('activesupport/CHANGELOG.md')
+#   rdoc.rdoc_files.include('activesupport/lib/active_support/**/*.rb')
+#   rdoc.rdoc_files.exclude('activesupport/lib/active_support/vendor/*')
 
-  rdoc.rdoc_files.include('activemodel/README.rdoc')
-  rdoc.rdoc_files.include('activemodel/CHANGELOG.md')
-  rdoc.rdoc_files.include('activemodel/lib/active_model/**/*.rb')
-end
+#   rdoc.rdoc_files.include('activemodel/README.rdoc')
+#   rdoc.rdoc_files.include('activemodel/CHANGELOG.md')
+#   rdoc.rdoc_files.include('activemodel/lib/active_model/**/*.rb')
+# end
 
-# Enhance rdoc task to copy referenced images also
-task :rdoc do
-  FileUtils.mkdir_p "doc/rdoc/files/examples/"
-  FileUtils.copy "activerecord/examples/associations.png", "doc/rdoc/files/examples/associations.png"
-end
+# # Enhance rdoc task to copy referenced images also
+# task :rdoc do
+#   FileUtils.mkdir_p "doc/rdoc/files/examples/"
+#   FileUtils.copy "activerecord/examples/associations.png", "doc/rdoc/files/examples/associations.png"
+# end
 
 desc 'Bump all versions to match version.rb'
 task :update_versions do
@@ -188,11 +188,11 @@ end
 # that webhook. Stable docs would be updated by any subsequent regular
 # push, but if you want that to happen right away just run this.
 #
-desc 'Publishes docs, run this AFTER a new stable tag has been pushed'
-task :publish_docs do
-  Net::HTTP.new('api.rubyonrails.org', 8080).start do |http|
-    request  = Net::HTTP::Post.new('/rails-master-hook')
-    response = http.request(request)
-    puts response.body
-  end
-end
+# desc 'Publishes docs, run this AFTER a new stable tag has been pushed'
+# task :publish_docs do
+#   Net::HTTP.new('api.rubyonrails.org', 8080).start do |http|
+#     request  = Net::HTTP::Post.new('/rails-master-hook')
+#     response = http.request(request)
+#     puts response.body
+#   end
+# end

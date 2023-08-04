@@ -53,15 +53,15 @@ end
 
 gem 'mocha', '~> 0.14', :require => false
 
-group :doc do
-  # The current sdoc cannot generate GitHub links due
-  # to a bug, but the PR that fixes it has been there
-  # for some weeks unapplied. As a temporary solution
-  # this is our own fork with the fix.
-  gem 'sdoc',  :git => 'git://github.com/fxn/sdoc.git'
-  gem 'RedCloth', '~> 4.2'
-  gem 'w3c_validators'
-end
+# group :doc do
+#   # The current sdoc cannot generate GitHub links due
+#   # to a bug, but the PR that fixes it has been there
+#   # for some weeks unapplied. As a temporary solution
+#   # this is our own fork with the fix.
+#   gem 'sdoc',  :git => 'git://github.com/fxn/sdoc.git'
+#   gem 'RedCloth', '~> 4.2'
+#   gem 'w3c_validators'
+# end
 
 # AS
 gem 'memcache-client', '>= 1.8.5'
@@ -85,7 +85,7 @@ platforms :ruby do
   gem 'nokogiri', '>= 1.4.5', '< 1.6'
 
   # AR
-  gem 'sqlite3', '~> 1.3.5'
+  # gem 'sqlite3', '~> 1.3.5'
 
   group :db do
     if RUBY_VERSION < '1.9.3'
@@ -93,8 +93,8 @@ platforms :ruby do
     else
       gem 'pg', '>= 0.11.0'
     end
-    gem 'mysql', '>= 2.8.1'
-    gem 'mysql2', '~> 0.3.10'
+    # gem 'mysql', '>= 2.8.1'
+    # gem 'mysql2', '~> 0.3.10'
   end
 end
 
